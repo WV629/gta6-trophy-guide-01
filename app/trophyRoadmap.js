@@ -1,6 +1,11 @@
 // trophyRoadmap: the eight-stage road to the platinum, built from the official
 // descriptions and the cited guides — story chapters first, then side strands,
 // collectibles, and the activity grind last. Missable trophies are flagged.
+// Improvement pass: each stage chip shows its trophy's source count, and each
+// stage heading totals the citations behind it, so the roadmap reads as a
+// cited plan rather than an bare list of names.
+import { sourceCount } from './trophyFilters.js';
+
 export const ROADMAP_STAGES = [
   {
     stage: 1,
@@ -59,7 +64,8 @@ export function renderRoadmap(container, trophies, earned, onSelectTrophy) {
     heading.append(number, document.createTextNode(meta.title));
     const progress = document.createElement('span');
     progress.className = 'stage-progress';
-    progress.textContent = `${done}/${stageTrophies.length} earned`;
+    const cites = stageTrophies.reduce((sum, t) => sum + sourceCount(t), 0);
+    progress.textContent = `${done}/${stageTrophies.length} earned · ${cites} citations`;
     heading.append(progress);
     item.append(heading);
 
@@ -71,7 +77,7 @@ export function renderRoadmap(container, trophies, earned, onSelectTrophy) {
     list.className = 'stage-trophies';
     for (const trophy of stageTrophies) {
       const chip = document.createElement('li');
-      chip.textContent = `${trophy.name}${trophy.missable ? ' ⚠' : ''}`;
+      chip.textContent = `${trophy.name} · ${sourceCount(trophy)} src${trophy.missable ? ' ⚠' : ''}`;
       if (trophy.missable) chip.classList.add('is-missable');
       if (earned.has(trophy.name)) chip.classList.add('is-earned');
       chip.title = trophy.missable ? 'Potentially missable' : trophy.description;

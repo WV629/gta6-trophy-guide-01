@@ -2,12 +2,19 @@
 // standard library only). The guide itself is this directory's app/ folder: plain
 // static files that open at app/index.html, work with the network off, and load
 // nothing beyond their own files. Its 55 trophies and cited guides live in
-// app/data/trophies.json. This program hands the entry in: it copies app/ and
-// screenshots/ from beside this file to /output and writes /output/dossier.json,
-// the summary the judge reads (screenshots, first-load files and bytes, and the
-// source), using the vendored make.fun library. vendor/makefun-frontend.ts is the
-// kit's copy and must stay unchanged: the scorer requires dossier.json to be byte
-// for byte what its own copy of the library writes.
+// app/data/trophies.json (each trophy carries a citation_count derived from its
+// own sources array, and a top-level audit block summarising the same numbers).
+// Improved version: the app renders a verification audit strip computed from the
+// data, per-trophy source counts with inline [1] [2] citation markers, a Sources
+// tab listing every distinct source, a "Next up" bar in roadmap order (missable
+// first), progress counters for countable trophies, and dispute boxes for the
+// contested missable trophy and the three unconfirmed ones. This program hands
+// the entry in: it copies app/ and screenshots/ from beside this file to /output
+// and writes /output/dossier.json, the summary the judge reads (screenshots,
+// first-load files and bytes, and the source), using the vendored make.fun
+// library. vendor/makefun-frontend.ts is the kit's copy and must stay unchanged:
+// the scorer requires dossier.json to be byte for byte what its own copy of the
+// library writes.
 //
 // Serve the guide locally with `node serve.ts`, then open http://localhost:8080.
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:

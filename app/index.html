@@ -22,9 +22,12 @@
   </div>
 </header>
 
+<div class="audit-strip" id="auditStrip" aria-label="Verification audit — computed from the trophy data"></div>
+
 <nav class="view-tabs" aria-label="Views">
   <button type="button" id="tabChecklist" class="view-tab is-active">Checklist</button>
   <button type="button" id="tabRoadmap" class="view-tab">Platinum roadmap</button>
+  <button type="button" id="tabSources" class="view-tab">Sources</button>
   <span class="tab-hint" id="tabHint">55 trophies &middot; 1 platinum &middot; 2 gold &middot; 6 silver &middot; 46 bronze &middot; 28 hidden &middot; 0 online</span>
 </nav>
 
@@ -61,6 +64,7 @@
 
 <main>
   <section id="checklistView" class="checklist-view">
+    <div class="next-up" id="nextUp" aria-label="Next up, in roadmap order"></div>
     <p class="list-meta" id="listMeta"></p>
     <div class="layout">
       <ul class="trophy-list" id="trophyList"></ul>
@@ -75,6 +79,12 @@
       <p class="missable-banner">&#9888; One trophy can be missed: <strong>Positive Mental Attitude</strong>. Do Lucia&rsquo;s balcony meditation in Chapter 1, before the chapter ends. Every other trophy stays earnable after the story.</p>
     </div>
     <ol class="roadmap-stages" id="roadmapStages"></ol>
+  </section>
+
+  <section id="sourcesView" class="sources-view" hidden>
+    <h2>Sources</h2>
+    <p class="sources-intro">Every guide on this page cites its sources by number (<span id="sourcesTotal"></span>). All sources were checked on 19 November 2026, launch day. The page itself loads nothing from them: it works fully offline, and the links below are references, not requests the app makes.</p>
+    <ul class="sources-list" id="sourcesList"></ul>
   </section>
 </main>
 

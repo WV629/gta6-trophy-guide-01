@@ -8,6 +8,15 @@ Leonida Trophy Guide — an offline guide and tracker for all 55 PlayStation 5 t
 
 The app is a tracker too: a checklist saved in localStorage, exportable to a JSON file and importable back; filters by kind, grade, missable and text search; a spoiler setting that hides story trophies' names and descriptions until earned; a progress bar with counts by grade; a detail view with the guide and its sources; and an 8-stage platinum roadmap (story chapters 1–4 + finale, side strands, collectibles, activities, cleanup) with missable flags. It is plain static files under `app/` with no build step and no network use at run time — every file it loads lives under `app/`.
 
+What the improved version adds, all computed from `app/data/trophies.json` so the numbers can never drift from the data:
+
+- **Audit strip** under the header: `55/55 official name, description, grade · 55/55 guides cite sources · 110 source citations · 55 backed by 2+ sources · 5 distinct sites · 1 possibly missable · 3 unconfirmed`.
+- **Per-trophy source counts** in the checklist (`2 src` on every card) and in the roadmap chips, plus inline citation markers `[1] [2]` in each guide keyed to a numbered **Sources for this guide** list in the detail panel.
+- **Sources tab**: every distinct source (PowerPyx, GTABase, Output Lag, Of Zen and Computing, U7BUY) with how many trophies cite it and the read date (19 November 2026).
+- **Next up bar**: the next unearned trophies in roadmap order, the possibly missable one first.
+- **Counter widgets** for countable trophies (meditations 0/18, card sets 0/3, scans 0/100, …) with a +/− stepper saved in localStorage; money targets ($250,000 / $100,000) are not counters.
+- **Dispute boxes**: the missable trophy shows both sides of its balcony-meditation question, and the three unconfirmed trophies (In The Beginning…, Bad Luck, I Guess, Ten Pin) are badged and boxed as unconfirmed rather than given invented steps. Each trophy also carries a derived `citation_count` in the data file.
+
 ## Run it
 
 ```sh
