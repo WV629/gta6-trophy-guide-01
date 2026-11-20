@@ -134,3 +134,21 @@ export function nextUpTrophies(trophies, earned, limit = 5) {
     )
     .slice(0, limit);
 }
+
+// Missables round: the trophies the guides flag as missable, in roadmap
+// order, and progress broken down by kind so the header card can show where
+// the remaining work sits (story, collectibles, activities, missable).
+export function missableTrophies(trophies) {
+  return trophies
+    .filter((t) => t.missable)
+    .sort((a, b) => a.roadmap_stage - b.roadmap_stage || a.id - b.id);
+}
+
+export function countByKind(trophies, earned) {
+  const kinds = ['story', 'collectibles', 'activities', 'missable'];
+  return kinds.map((kind) => {
+    const total = trophies.filter((t) => t.kind === kind).length;
+    const done = trophies.filter((t) => t.kind === kind && earned.has(t.name)).length;
+    return { kind, done, total };
+  });
+}

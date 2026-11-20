@@ -94,3 +94,58 @@ export function setCounter(counters, name, value, target) {
   saveCounters(counters);
   return counters;
 }
+
+// Missables round: a plain-text progress summary for sharing or pasting
+// elsewhere, built from the same data the app renders so it can never
+// disagree with the checklist on screen. Counters in progress and the next
+// trophies in roadmap order are included; money targets are shown as targets,
+// not counts.
+export function progressSummaryText(trophies, earned, counters, nextUp) {
+  const total = trophies.length;
+  const done = earned.size;
+  const percent = total ? Math.round((done / total) * 100) : 0;
+  const lines = [`Leonida Trophy Guide — ${done}/${total} trophies (${percent}%)`];
+  for (const grade of ['platinum', 'gold', 'silver', 'bronze']) {
+    const gradeTotal = trophies.filter((t) => t.grade === grade).length;
+    const gradeDone = trophies.filter((t) => t.grade === grade && earned.has(t.name)).length;
+    lines.push(`${grade}: ${gradeDone}/${gradeTotal}`);
+  }
+  const inProgress = [...counters.entries()].filter(([, v]) => v > 0);
+  if (inProgress.length > 0) {
+    lines.push('Counters in progress:');
+    for (const [name, value] of inProgress) {
+      const trophy = trophies.find((t) => t.name === name);
+      lines.push(`  ${name}: ${value}/${trophy?.count ?? '?'}`);
+    }
+  }
+  if (nextUp.length > 0) {
+    lines.push('Next up (roadmap order):');
+    for (const trophy of nextUp) {
+      lines.push(`  ${trophy.name}${trophy.missable ? ' (missable)' : ''}`);
+    }
+  }
+  return lines.join('\n');
+}
+
+// Copy text to the clipboard, falling back to a temporary textarea for
+// browsers without clipboard write access. Returns true when the text landed.
+export async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.append(area);
+      area.select();
+      const ok = document.execCommand('copy');
+      area.remove();
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+}

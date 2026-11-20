@@ -18,6 +18,9 @@
     <div class="progress-numbers"><span id="progressCount">0 / 55</span><span id="progressPercent">0%</span></div>
     <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <ul class="grade-counts" id="gradeCounts"></ul>
+    <ul class="kind-counts" id="kindCounts"></ul>
+    <button type="button" id="copySummaryButton" class="copy-summary">Copy progress summary</button>
+    <p class="copy-feedback" id="copyFeedback" aria-live="polite"></p>
     <p class="progress-note" id="progressNote">Tick a trophy to mark it earned.</p>
   </div>
 </header>
@@ -27,6 +30,7 @@
 <nav class="view-tabs" aria-label="Views">
   <button type="button" id="tabChecklist" class="view-tab is-active">Checklist</button>
   <button type="button" id="tabRoadmap" class="view-tab">Platinum roadmap</button>
+  <button type="button" id="tabMissables" class="view-tab">Missables</button>
   <button type="button" id="tabSources" class="view-tab">Sources</button>
   <span class="tab-hint" id="tabHint">55 trophies &middot; 1 platinum &middot; 2 gold &middot; 6 silver &middot; 46 bronze &middot; 28 hidden &middot; 0 online</span>
 </nav>
@@ -85,6 +89,10 @@
     <h2>Sources</h2>
     <p class="sources-intro">Every guide on this page cites its sources by number (<span id="sourcesTotal"></span>). All sources were checked on 19 November 2026, launch day. The page itself loads nothing from them: it works fully offline, and the links below are references, not requests the app makes.</p>
     <ul class="sources-list" id="sourcesList"></ul>
+  </section>
+
+  <section id="missablesView" class="missables-view" hidden>
+    <div id="missablesBody"></div>
   </section>
 </main>
 

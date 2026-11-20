@@ -68,7 +68,7 @@ function renderCounter(panel, trophy, state, onCounterChange) {
   panel.append(box);
 }
 
-export function renderTrophyDetail(panel, trophy, state, onToggleEarned, onCounterChange) {
+export function renderTrophyDetail(panel, trophy, state, onToggleEarned, onCounterChange, onOpenMissables) {
   panel.replaceChildren();
   if (!trophy) {
     const empty = document.createElement('p');
@@ -112,6 +112,14 @@ export function renderTrophyDetail(panel, trophy, state, onToggleEarned, onCount
       'PowerPyx flags this as the only trophy that can be missed: the first meditation happens at Jason’s house in Chapter 1 and is gone once the chapter ends. It is not yet confirmed whether that balcony meditation is actually required for the trophy — it raises the counter but is not marked as a regular spot — but PowerPyx’s author did it and then earned the trophy. Do it in Chapter 1 to be safe and keep a Chapter 1 save until the trophy pops.';
     warning.append(heading, body);
     panel.append(warning);
+    if (onOpenMissables) {
+      const open = document.createElement('button');
+      open.type = 'button';
+      open.className = 'missables-link';
+      open.textContent = 'See the Missables view →';
+      open.addEventListener('click', onOpenMissables);
+      panel.append(open);
+    }
   }
 
   if (isUnconfirmed(trophy)) {

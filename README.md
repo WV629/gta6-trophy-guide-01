@@ -17,6 +17,13 @@ What the improved version adds, all computed from `app/data/trophies.json` so th
 - **Counter widgets** for countable trophies (meditations 0/18, card sets 0/3, scans 0/100, …) with a +/− stepper saved in localStorage; money targets ($250,000 / $100,000) are not counters.
 - **Dispute boxes**: the missable trophy shows both sides of its balcony-meditation question, and the three unconfirmed trophies (In The Beginning…, Bad Luck, I Guess, Ten Pin) are badged and boxed as unconfirmed rather than given invented steps. Each trophy also carries a derived `citation_count` in the data file.
 
+What this round adds, again computed from the same data file:
+
+- **Missables view** (new tab, `?view=missables`): the one possibly missable trophy — Positive Mental Attitude — with its chapter window (Chapter 1, before the chapter ends), what to do (Lucia's balcony meditation after Down to Earth), why it can be missed, the sources' dispute, and the safety net (keep a Chapter 1 save). The data file carries the window, trigger and save advice as derived fields (`missable_window`, `missable_trigger`, `missable_save`), all taken from the trophy's own guide. The view also states the rest plainly: the other 54 trophies stay earnable after the story, plus the roadmap's three safety habits (manual saves per chapter, no cheats, Yago's time-sensitive race).
+- **Per-kind progress counts** in the header card (Story / Collectibles / Activities / Missable), next to the per-grade counts.
+- **Copy progress summary**: a button in the header card copies a plain-text summary (totals by grade, counters in progress, next up in roadmap order) for sharing — clipboard with a textarea fallback.
+- The detail panel and the roadmap both link into the Missables view from the missable trophy, so the warning is one click away wherever you meet it.
+
 ## Run it
 
 ```sh

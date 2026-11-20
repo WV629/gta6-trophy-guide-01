@@ -8,7 +8,10 @@
 // data, per-trophy source counts with inline [1] [2] citation markers, a Sources
 // tab listing every distinct source, a "Next up" bar in roadmap order (missable
 // first), progress counters for countable trophies, and dispute boxes for the
-// contested missable trophy and the three unconfirmed ones. This program hands
+// contested missable trophy and the three unconfirmed ones. This round adds a
+// dedicated Missables view (chapter window, what to do, the sources' dispute,
+// and the save safety net), per-kind progress counts, and a copyable plain-text
+// progress summary. This program hands
 // the entry in: it copies app/ and screenshots/ from beside this file to /output
 // and writes /output/dossier.json, the summary the judge reads (screenshots,
 // first-load files and bytes, and the source), using the vendored make.fun

@@ -17,6 +17,8 @@ import {
   saveSettings,
   loadCounters,
   setCounter,
+  progressSummaryText,
+  copyText,
 } from './trophyStore.js';
 import {
   KIND_LABELS,
@@ -29,9 +31,11 @@ import {
   nextUpTrophies,
   sourceCount,
   isUnconfirmed,
+  countByKind,
 } from './trophyFilters.js';
 import { renderTrophyDetail } from './trophyDetail.js';
 import { renderRoadmap } from './trophyRoadmap.js';
+import { renderMissables } from './trophyMissables.js';
 
 const GRADE_LABELS = {
   platinum: 'Platinum',
@@ -54,7 +58,7 @@ const state = {
   earnedOnly: false,
   hideSpoilers: params.get('spoilers') === 'off' ? false : (savedSettings.hideSpoilers ?? true),
   selectedId: params.get('trophy') ? Number(params.get('trophy')) : null,
-  view: params.get('view') === 'roadmap' ? 'roadmap' : params.get('view') === 'sources' ? 'sources' : 'checklist',
+  view: ['roadmap', 'sources', 'missables'].includes(params.get('view')) ? params.get('view') : 'checklist',
 };
 
 const listEl = document.getElementById('trophyList');
@@ -159,6 +163,16 @@ function renderProgress() {
     strong.textContent = `${d}/${t}`;
     item.append(document.createTextNode(`${GRADE_LABELS[grade]} `), strong);
     countsEl.append(item);
+  }
+  const kindCounts = countByKind(state.trophies, state.earned);
+  const kindCountsEl = document.getElementById('kindCounts');
+  kindCountsEl.replaceChildren();
+  for (const { kind, done: d, total: t } of kindCounts) {
+    const item = document.createElement('li');
+    const strong = document.createElement('b');
+    strong.textContent = `${d}/${t}`;
+    item.append(document.createTextNode(`${KIND_LABELS[kind] ?? kind} `), strong);
+    kindCountsEl.append(item);
   }
 }
 
@@ -273,6 +287,7 @@ function renderDetail() {
       setCounter(state.counters, name, value, target);
       renderAll();
     },
+    () => setView('missables'),
   );
 }
 
@@ -282,7 +297,7 @@ function renderRoadmapView() {
     setView('checklist');
     renderAll();
     document.getElementById('detailPanel').scrollIntoView({ block: 'nearest' });
-  });
+  }, () => setView('missables'));
 }
 
 function setView(view) {
@@ -290,9 +305,11 @@ function setView(view) {
   document.getElementById('tabChecklist').classList.toggle('is-active', view === 'checklist');
   document.getElementById('tabRoadmap').classList.toggle('is-active', view === 'roadmap');
   document.getElementById('tabSources').classList.toggle('is-active', view === 'sources');
+  document.getElementById('tabMissables').classList.toggle('is-active', view === 'missables');
   document.getElementById('checklistView').hidden = view !== 'checklist';
   document.getElementById('roadmapView').hidden = view !== 'roadmap';
   document.getElementById('sourcesView').hidden = view !== 'sources';
+  document.getElementById('missablesView').hidden = view !== 'missables';
 }
 
 function renderAll() {
@@ -303,6 +320,25 @@ function renderAll() {
   renderDetail();
   renderRoadmapView();
   renderSourcesView();
+  renderMissablesView();
+}
+
+function renderMissablesView() {
+  renderMissables(
+    document.getElementById('missablesBody'),
+    state.trophies,
+    state.earned,
+    (trophy) => {
+      state.selectedId = trophy.id;
+      setView('checklist');
+      renderAll();
+      document.getElementById('detailPanel').scrollIntoView({ block: 'nearest' });
+    },
+    (name) => {
+      toggleEarned(state.earned, name);
+      renderAll();
+    },
+  );
 }
 
 function persistSettings() {
@@ -349,8 +385,24 @@ document.getElementById('tabRoadmap').addEventListener('click', () => {
 document.getElementById('tabSources').addEventListener('click', () => {
   setView('sources');
 });
+document.getElementById('tabMissables').addEventListener('click', () => {
+  setView('missables');
+});
 document.getElementById('exportButton').addEventListener('click', () => {
   exportProgress(state.earned);
+});
+document.getElementById('copySummaryButton').addEventListener('click', async () => {
+  const feedback = document.getElementById('copyFeedback');
+  const summary = progressSummaryText(
+    state.trophies,
+    state.earned,
+    state.counters,
+    nextUpTrophies(state.trophies, state.earned),
+  );
+  const ok = await copyText(summary);
+  feedback.textContent = ok
+    ? 'Summary copied — paste it anywhere to share your progress.'
+    : 'Copy did not work in this browser — the checklist itself still saves locally.';
 });
 document.getElementById('importInput').addEventListener('change', async (event) => {
   const file = event.target.files[0];

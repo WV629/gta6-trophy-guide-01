@@ -49,7 +49,7 @@ export const ROADMAP_STAGES = [
   },
 ];
 
-export function renderRoadmap(container, trophies, earned, onSelectTrophy) {
+export function renderRoadmap(container, trophies, earned, onSelectTrophy, onOpenMissables) {
   container.replaceChildren();
   for (const meta of ROADMAP_STAGES) {
     const stageTrophies = trophies.filter((t) => t.roadmap_stage === meta.stage);
@@ -85,6 +85,14 @@ export function renderRoadmap(container, trophies, earned, onSelectTrophy) {
       list.append(chip);
     }
     item.append(list);
+    if (stageTrophies.some((t) => t.missable) && onOpenMissables) {
+      const open = document.createElement('button');
+      open.type = 'button';
+      open.className = 'missables-link';
+      open.textContent = 'See the Missables view for this stage’s window →';
+      open.addEventListener('click', onOpenMissables);
+      item.append(open);
+    }
     container.append(item);
   }
 }
